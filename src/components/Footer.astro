@@ -4,7 +4,7 @@ const year = new Date().getFullYear();
 
 <footer class="site-footer">
   <div class="wrap footer-inner">
-    <div>
+    <div class="footer-row">
       <img
         class="footer-logo"
         src="/images/brand/logo-full.png"
@@ -12,15 +12,18 @@ const year = new Date().getFullYear();
         width="1800"
         height="1180"
       />
-      <p class="footer-tag">Exclusive boudoir photography based in Stevensville, Montana.</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/gallery">Gallery</a>
+        <a href="/packages">Packages</a>
+        <a href="/contact">Contact</a>
+        <a href="/about">The Photographer</a>
+      </nav>
     </div>
-    <div class="footer-links">
-      <a href="/gallery">Gallery</a>
-      <a href="/packages">Packages</a>
-      <a href="/contact">Contact</a>
-      <a href="/about">The Photographer</a>
-    </div>
-    <p class="footer-copy">&copy; {year} Bitterroot Boudoir. All rights reserved.</p>
+    <p class="footer-meta">
+      Stevensville, Montana
+      <span aria-hidden="true">·</span>
+      &copy; {year} Bitterroot Boudoir
+    </p>
   </div>
 </footer>
 
@@ -29,52 +32,74 @@ const year = new Date().getFullYear();
     margin-top: auto;
     border-top: 1px solid var(--line);
     background: rgba(0, 0, 0, 0.28);
-    padding: var(--space-lg) 0 var(--space-md);
+    padding: 1rem 0 0.55rem;
   }
 
   .footer-inner {
-    display: grid;
-    gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .footer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2rem;
+    flex-wrap: wrap;
   }
 
   .footer-logo {
     display: block;
-    height: 8.5rem;
+    height: 6.75rem;
     width: auto;
-    margin: 0 0 0.85rem;
-  }
-
-  @media (max-width: 720px) {
-    .footer-logo {
-      height: 6.5rem;
-    }
-  }
-
-  .footer-tag,
-  .footer-copy {
-    margin: 0;
-    font-size: 0.92rem;
+    flex-shrink: 0;
   }
 
   .footer-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.25rem;
+    justify-content: flex-end;
+    gap: 0.35rem 1.15rem;
   }
 
   .footer-links a {
     text-decoration: none;
+    font-size: 0.9rem;
     font-weight: 500;
   }
 
-  @media (min-width: 720px) {
-    .footer-inner {
-      grid-template-columns: 1.4fr 1fr;
-      align-items: end;
+  .footer-meta {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.2;
+    color: var(--ink-soft);
+    letter-spacing: 0.01em;
+    text-align: center;
+  }
+
+  .footer-meta span {
+    margin-inline: 0.4rem;
+    opacity: 0.55;
+  }
+
+  @media (max-width: 720px) {
+    .footer-logo {
+      height: 5.25rem;
     }
 
-    .footer-copy {
-      grid-column: 1 / -1;
+    .footer-row {
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .footer-links {
+      justify-content: center;
+    }
+
+    .site-footer {
+      padding: 0.9rem 0 0.5rem;
     }
   }
 </style>
