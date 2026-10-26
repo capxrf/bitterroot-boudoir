@@ -1,0 +1,80 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <img
+        class="footer-logo"
+        src="/images/brand/logo-full.png"
+        alt="Bitterroot Boudoir"
+        width="1800"
+        height="1180"
+      />
+      <p class="footer-tag">Exclusive boudoir photography based in Stevensville, Montana.</p>
+    </div>
+    <div class="footer-links">
+      <a href="/gallery">Gallery</a>
+      <a href="/packages">Packages</a>
+      <a href="/contact">Contact</a>
+      <a href="/about">The Photographer</a>
+    </div>
+    <p class="footer-copy">&copy; {year} Bitterroot Boudoir. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: auto;
+    border-top: 1px solid var(--line);
+    background: rgba(0, 0, 0, 0.28);
+    padding: var(--space-lg) 0 var(--space-md);
+  }
+
+  .footer-inner {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .footer-logo {
+    display: block;
+    height: 8.5rem;
+    width: auto;
+    margin: 0 0 0.85rem;
+  }
+
+  @media (max-width: 720px) {
+    .footer-logo {
+      height: 6.5rem;
+    }
+  }
+
+  .footer-tag,
+  .footer-copy {
+    margin: 0;
+    font-size: 0.92rem;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  .footer-links a {
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  @media (min-width: 720px) {
+    .footer-inner {
+      grid-template-columns: 1.4fr 1fr;
+      align-items: end;
+    }
+
+    .footer-copy {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

@@ -1,0 +1,176 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PlaceholderImage from "../components/PlaceholderImage.astro";
+---
+
+<BaseLayout title="Bitterroot Boudoir" bodyClass="home">
+  <section class="hero">
+    <div class="hero-media" aria-hidden="true">
+      <img
+        class="hero-image"
+        src="/images/home/hero.webp"
+        alt=""
+        width="7364"
+        height="4142"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
+    </div>
+
+    <div class="hero-copy">
+      <h1 class="hero-brand reveal">
+        <img
+          class="hero-logo"
+          src="/images/brand/logo-full.png"
+          alt="Bitterroot Boudoir"
+          width="1800"
+          height="1180"
+        />
+      </h1>
+      <p class="lede reveal reveal-delay-1">Discover your own beauty.</p>
+      <div class="cta-row reveal reveal-delay-2">
+        <a class="btn btn-primary" href="/contact">Book a session</a>
+        <a class="btn btn-ghost" href="/gallery">View the gallery</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section intro">
+    <div class="wrap intro-grid">
+      <div>
+        <p class="eyebrow">The experience</p>
+        <h2>High-end boudoir, made personal.</h2>
+      </div>
+      <div>
+        <p class="lede">
+          Bitterroot Boudoir is a specialized studio for clients who want more
+          than pretty pictures. Every session is guided, intentional, and
+          finished to a premium standard — so the final images feel like you,
+          at your most confident.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-ghost" href="/about">Meet the photographer</a>
+          <a class="btn btn-primary" href="/packages">See packages</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight preview">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Selected work</p>
+        <h2>A quieter kind of bold.</h2>
+      </div>
+      <div class="preview-grid">
+        <PlaceholderImage label="Gallery preview 01" aspect="3 / 4" />
+        <PlaceholderImage label="Gallery preview 02" aspect="3 / 4" />
+        <PlaceholderImage label="Gallery preview 03" aspect="3 / 4" />
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="/gallery">Explore the full gallery</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    align-items: start;
+    justify-items: start;
+    color: var(--ink);
+    overflow: hidden;
+  }
+
+  .hero-media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  @media (max-width: 1100px) {
+    .hero-image {
+      object-position: 70% center;
+    }
+  }
+
+  .hero-copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 1.15rem;
+    width: fit-content;
+    max-width: min(100% - 2.5rem, 22rem);
+    margin: 0;
+    padding: 0.75rem 0 2.5rem;
+    margin-inline-start: max(1.25rem, calc((100% - var(--max)) / 2));
+  }
+
+  .hero-brand {
+    margin: 0;
+    width: 100%;
+    font-size: 0;
+    line-height: 0;
+  }
+
+  .hero-logo {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .hero .lede {
+    margin: 0;
+    color: rgba(242, 235, 228, 0.88);
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+  }
+
+  .hero .cta-row {
+    margin-top: 0.15rem;
+    justify-content: center;
+  }
+
+  @media (max-width: 720px) {
+    .hero-copy {
+      margin-inline-start: 0.75rem;
+      max-width: min(100% - 1.5rem, 22rem);
+    }
+  }
+
+  .intro-grid {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .preview-grid {
+    display: grid;
+    gap: 0.85rem;
+    margin-bottom: 1.75rem;
+  }
+
+  @media (min-width: 800px) {
+    .intro-grid {
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 3rem;
+      align-items: end;
+    }
+
+    .preview-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+  }
+</style>

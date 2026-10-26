@@ -1,0 +1,96 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="The Photographer"
+  description="Meet Caleb, the photographer behind Bitterroot Boudoir in Stevensville, Montana."
+>
+  <section class="page-hero">
+    <div class="wrap photographer">
+      <div class="bio">
+        <h1 class="reveal">Meet Caleb</h1>
+        <p class="subheader reveal reveal-delay-1">Your Photographer</p>
+
+        <div class="bio-copy reveal reveal-delay-2">
+          <p>
+            I began my photographic journey in the wild, photographing landscapes
+            and the natural world. Nature taught me how to study a subject, and
+            how light can reveal moments of quiet drama and breathtaking beauty.
+            I learned that a photographer’s job isn’t to create beauty but rather
+            to find what’s already there and honor it through light and perspective.
+          </p>
+          <p>
+            For me, boudoir is no different. Every body is its own unique
+            landscape, shaped by curves, lines, and stories. When light falls
+            across it just right, it reveals an elegance that can be emotionally
+            moving.
+          </p>
+          <p>
+            My goal is to help you fall in love with your own image. Not just
+            with a favorite photo or two, but with the person in them. I want you
+            to leave our session seeing yourself the way I see you, and carrying
+            that confidence long after the images are delivered.
+          </p>
+          <p>
+            There's beauty in all of us and we all owe it to ourselves to
+            discover it.
+          </p>
+        </div>
+
+        <div class="cta-row reveal reveal-delay-3">
+          <a class="btn btn-primary" href="/contact">Contact</a>
+        </div>
+      </div>
+
+      <img
+        class="portrait reveal reveal-delay-3"
+        src="/images/about/photographer.webp"
+        alt="Caleb, photographer at Bitterroot Boudoir"
+        loading="eager"
+        decoding="async"
+      />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .photographer {
+    display: grid;
+    gap: var(--space-md);
+    align-items: end;
+  }
+
+  .portrait {
+    width: min(100%, 26rem);
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    background: var(--surface);
+  }
+
+  .subheader {
+    margin: -0.35em 0 1.25em;
+    font-family: var(--font-body);
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .bio-copy {
+    display: grid;
+    gap: 1em;
+  }
+
+  .bio-copy p {
+    margin: 0;
+  }
+
+  @media (min-width: 860px) {
+    .photographer {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3rem;
+    }
+  }
+</style>

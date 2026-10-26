@@ -1,0 +1,38 @@
+---
+interface Props {
+  label?: string;
+  aspect?: string;
+  class?: string;
+}
+
+const {
+  label = "Photo placeholder",
+  aspect = "3 / 4",
+  class: className = "",
+} = Astro.props;
+---
+
+<div class:list={["ph", className]} style={`aspect-ratio: ${aspect};`} role="img" aria-label={label}>
+  <span>{label}</span>
+</div>
+
+<style>
+  .ph {
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(145deg, rgba(var(--accent-rgb), 0.14), transparent 45%),
+      linear-gradient(320deg, rgba(0, 0, 0, 0.35), transparent 40%),
+      #2a2422;
+    color: rgba(242, 235, 228, 0.45);
+  }
+
+  .ph span {
+    position: absolute;
+    inset: auto 1rem 1rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+</style>

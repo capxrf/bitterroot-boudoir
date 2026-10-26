@@ -1,0 +1,186 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const formspreeId = import.meta.env.PUBLIC_FORMSPREE_ID;
+const formAction = formspreeId
+  ? `https://formspree.io/f/${formspreeId}`
+  : "";
+---
+
+<BaseLayout
+  title="Contact"
+  description="Book a premium boudoir session with Bitterroot Boudoir in Stevensville, Montana."
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow reveal">Contact</p>
+      <h1 class="reveal reveal-delay-1">Let's plan your session.</h1>
+      <p class="lede reveal reveal-delay-2">
+        Share a little about yourself and what you're hoping for. I'll follow up
+        to talk through timing, packages, and next steps.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="wrap contact-grid">
+      <aside class="contact-aside">
+        <h2>Studio details</h2>
+        <p>
+          Stevensville, Montana<br />
+          Serving the Bitterroot Valley & surrounding areas
+        </p>
+        <p>
+          Prefer email directly?<br />
+          <a href="mailto:hello@bitterrootboudoir.com">hello@bitterrootboudoir.com</a>
+        </p>
+      </aside>
+
+      <form
+        class="contact-form"
+        method="POST"
+        action={formAction || undefined}
+        data-formspree-ready={formAction ? "true" : "false"}
+      >
+        <input type="hidden" name="_subject" value="New Bitterroot Boudoir inquiry" />
+        <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" />
+
+        {
+          !formAction && (
+            <p class="form-banner" role="status">
+              Formspree is not configured yet. Add
+              <code>PUBLIC_FORMSPREE_ID</code> to <code>.env</code> (see
+              <code>.env.example</code>), then restart the dev server.
+            </p>
+          )
+        }
+
+        <label>
+          <span>Name</span>
+          <input type="text" name="name" required autocomplete="name" />
+        </label>
+
+        <label>
+          <span>Email</span>
+          <input type="email" name="email" required autocomplete="email" />
+        </label>
+
+        <label>
+          <span>Phone <em>(optional)</em></span>
+          <input type="tel" name="phone" autocomplete="tel" />
+        </label>
+
+        <label>
+          <span>Package interest</span>
+          <select name="package">
+            <option value="Not sure yet">Not sure yet</option>
+            <option value="Essential">Essential</option>
+            <option value="Signature">Signature</option>
+            <option value="Heirloom">Heirloom</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Tell me about your vision</span>
+          <textarea name="message" rows="6" required></textarea>
+        </label>
+
+        <button class="btn btn-primary" type="submit" disabled={!formAction}>
+          Send inquiry
+        </button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-grid {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .contact-aside {
+    max-width: 28rem;
+  }
+
+  .contact-aside h2 {
+    margin-bottom: 0.5em;
+  }
+
+  .contact-form {
+    display: grid;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .form-banner {
+    margin: 0;
+    padding: 0.85rem 1rem;
+    background: rgba(var(--accent-rgb), 0.1);
+    border: 1px solid rgba(var(--accent-rgb), 0.28);
+    font-size: 0.95rem;
+  }
+
+  label {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+  }
+
+  label em {
+    font-style: normal;
+    font-weight: 400;
+    color: var(--ink-soft);
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    color: var(--ink);
+    padding: 0.8rem 0.9rem;
+    font: inherit;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: 2px solid rgba(var(--accent-rgb), 0.4);
+    outline-offset: 1px;
+    border-color: rgba(var(--accent-rgb), 0.5);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 9rem;
+  }
+
+  .hp {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+  }
+
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  code {
+    font-size: 0.9em;
+  }
+
+  @media (min-width: 860px) {
+    .contact-grid {
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 3rem;
+      align-items: start;
+    }
+  }
+</style>

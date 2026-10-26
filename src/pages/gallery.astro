@@ -1,0 +1,112 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PlaceholderImage from "../components/PlaceholderImage.astro";
+
+const images = Array.from({ length: 18 }, (_, i) => {
+  const n = String(i + 1).padStart(2, "0");
+  const tall = i % 5 === 0 || i % 7 === 0;
+  return {
+    label: `Gallery image ${n}`,
+    aspect: tall ? "3 / 5" : "3 / 4",
+  };
+});
+---
+
+<BaseLayout
+  title="Gallery"
+  description="Browse boudoir photography by Bitterroot Boudoir in Stevensville, Montana."
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow reveal">Gallery</p>
+      <h1 class="reveal reveal-delay-1">Work that feels intimate and refined.</h1>
+      <p class="lede reveal reveal-delay-2">
+        A closer look at the mood, detail, and finish that define a Bitterroot
+        Boudoir session.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-tight gallery-section">
+    <div class="wrap">
+      <div class="gallery-grid">
+        {
+          images.map((image) => (
+            <figure class="gallery-item">
+              <PlaceholderImage label={image.label} aspect={image.aspect} />
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap cta-band">
+      <div>
+        <h2>Ready to create your set?</h2>
+        <p>Tell me what you're hoping to feel when you see the final images.</p>
+      </div>
+      <a class="btn btn-primary" href="/contact">Start the conversation</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .gallery-grid {
+    columns: 1;
+    column-gap: 0.85rem;
+  }
+
+  .gallery-item {
+    break-inside: avoid;
+    margin: 0 0 0.85rem;
+    overflow: hidden;
+  }
+
+  .gallery-item :global(.ph) {
+    transition: transform 0.55s var(--ease);
+  }
+
+  .gallery-item:hover :global(.ph) {
+    transform: scale(1.03);
+  }
+
+  .cta-band {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: var(--space-md);
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .cta-band h2 {
+    margin-bottom: 0.35em;
+  }
+
+  @media (min-width: 640px) {
+    .gallery-grid {
+      columns: 2;
+    }
+  }
+
+  @media (min-width: 980px) {
+    .gallery-grid {
+      columns: 3;
+      column-gap: 1rem;
+    }
+
+    .gallery-item {
+      margin-bottom: 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-item:hover :global(.ph) {
+      transform: none;
+    }
+  }
+</style>

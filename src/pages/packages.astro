@@ -1,0 +1,209 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const packages = [
+  {
+    name: "Essential",
+    price: "From $650",
+    summary: "A focused session for clients who want a polished starter collection.",
+    includes: [
+      "Pre-session planning call",
+      "1-hour studio or in-home session",
+      "Wardrobe guidance",
+      "15 fully retouched images",
+      "Online gallery for sharing & download",
+    ],
+  },
+  {
+    name: "Signature",
+    price: "From $1,100",
+    summary: "The full premium experience — more time, more looks, more finished art.",
+    featured: true,
+    includes: [
+      "Detailed creative consult",
+      "2-hour session with multiple setups",
+      "Posing direction throughout",
+      "35 fully retouched images",
+      "Priority gallery delivery",
+      "Print-ready files",
+    ],
+  },
+  {
+    name: "Heirloom",
+    price: "From $1,800",
+    summary: "An elevated session with expanded coverage and luxury deliverables.",
+    includes: [
+      "Extended planning & moodboarding",
+      "3-hour session",
+      "Hair & makeup coordination guidance",
+      "60 fully retouched images",
+      "Fine-art print credit",
+      "Private reveal appointment",
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Packages"
+  description="Premium boudoir photography packages from Bitterroot Boudoir in Stevensville, Montana."
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow reveal">Packages</p>
+      <h1 class="reveal reveal-delay-1">Clear packages. Premium results.</h1>
+      <p class="lede reveal reveal-delay-2">
+        Pricing reflects specialized skill, careful direction, and a finished
+        product built to last. Customize any package after we talk through your goals.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="wrap packages-grid">
+      {
+        packages.map((pkg) => (
+          <article class:list={["package", { featured: pkg.featured }]}>
+            {pkg.featured && <p class="package-note">Most chosen</p>}
+            <h2>{pkg.name}</h2>
+            <p class="package-price">{pkg.price}</p>
+            <p>{pkg.summary}</p>
+            <ul>
+              {pkg.includes.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+            <a class="btn btn-primary" href="/contact">Inquire about {pkg.name}</a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap experience">
+      <div class="section-head">
+        <p class="eyebrow">The experience</p>
+        <h2>What to expect from a session</h2>
+      </div>
+      <div class="experience-grid">
+        <div>
+          <h3>Based in the Bitterroot Valley</h3>
+          <p>
+            Sessions are held in and around Stevensville, Montana, with a private,
+            unhurried atmosphere. You'll be guided through posing and pacing so
+            you never have to guess what to do in front of the camera.
+          </p>
+        </div>
+        <div>
+          <h3>Premium by design</h3>
+          <p>
+            Rates reflect a high level of skill, preparation, and retouching.
+            This is a specialized service for clients who want a refined experience
+            and artwork that holds up — not a rushed mini-session.
+          </p>
+        </div>
+        <div>
+          <h3>What you can expect</h3>
+          <p>
+            Clear communication before the shoot, confident direction during it,
+            and a polished gallery afterward. Your comfort and trust come first;
+            the artistry follows from there.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="wrap note">
+      <h2>A note on pricing</h2>
+      <p>
+        Every session is customized. If you have a specific vision, timeline, or
+        deliverable in mind, reach out and we’ll shape a package that fits —
+        without compromising the quality of the final work.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .packages-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .experience-grid {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .experience h3 {
+    margin-bottom: 0.4em;
+  }
+
+  .package {
+    display: grid;
+    gap: 0.85rem;
+    padding: 1.75rem 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .package.featured {
+    border-color: rgba(var(--accent-rgb), 0.45);
+    box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 0.18);
+  }
+
+  .package-note {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .package h2 {
+    margin: 0;
+  }
+
+  .package-price {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--ink);
+  }
+
+  .package ul {
+    margin: 0.25rem 0 0.5rem;
+    padding-left: 1.1rem;
+    color: var(--ink-soft);
+  }
+
+  .package li + li {
+    margin-top: 0.4rem;
+  }
+
+  .package .btn {
+    justify-self: start;
+    margin-top: 0.5rem;
+  }
+
+  .note {
+    max-width: 40rem;
+  }
+
+  @media (min-width: 900px) {
+    .packages-grid {
+      grid-template-columns: repeat(3, 1fr);
+      align-items: stretch;
+      gap: 1.15rem;
+    }
+
+    .experience-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+  }
+</style>
