@@ -1,6 +1,7 @@
 ---
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import ComingSoon from "../components/ComingSoon.astro";
 import "../styles/global.css";
 
 interface Props {
@@ -15,10 +16,18 @@ const {
   bodyClass = "",
 } = Astro.props;
 
-const fullTitle =
-  title === "Bitterroot Boudoir"
+// Temporary gate: set PUBLIC_COMING_SOON=false in .env to preview the full site locally.
+const comingSoon = import.meta.env.PUBLIC_COMING_SOON !== "false";
+
+const fullTitle = comingSoon
+  ? "Coming Soon | Bitterroot Boudoir"
+  : title === "Bitterroot Boudoir"
     ? title
     : `${title} | Bitterroot Boudoir`;
+
+const metaDescription = comingSoon
+  ? "Bitterroot Boudoir is coming soon — exclusive boudoir photography in Stevensville, Montana."
+  : description;
 ---
 
 <!doctype html>
@@ -26,7 +35,8 @@ const fullTitle =
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
+    <meta name="description" content={metaDescription} />
+    {comingSoon && <meta name="robots" content="noindex, nofollow" />}
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/png" href="/images/brand/logo-mark.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -37,11 +47,19 @@ const fullTitle =
     />
     <title>{fullTitle}</title>
   </head>
-  <body class={bodyClass}>
-    <Header />
-    <main class="site-main">
-      <slot />
-    </main>
-    <Footer />
+  <body class={comingSoon ? "coming-soon-page" : bodyClass}>
+    {
+      comingSoon ? (
+        <ComingSoon />
+      ) : (
+        <>
+          <Header />
+          <main class="site-main">
+            <slot />
+          </main>
+          <Footer />
+        </>
+      )
+    }
   </body>
 </html>

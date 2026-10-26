@@ -255,4 +255,8 @@ p:last-child {
   .page-hero {
     padding: calc(var(--nav-h) + 2rem) 0 var(--space-md);
   }
+
+  .cta-row {
+    justify-content: center;
+  }
 }
