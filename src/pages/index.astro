@@ -92,15 +92,19 @@ import PlaceholderImage from "../components/PlaceholderImage.astro";
   }
 
   .hero-image {
-    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: auto;
     height: 100%;
-    object-fit: cover;
-    object-position: center;
+    max-width: none;
+    transform: translateX(-50%);
   }
 
   @media (max-width: 1100px) {
     .hero-image {
-      object-position: 70% center;
+      left: 70%;
+      transform: translateX(-70%);
     }
   }
 
@@ -145,8 +149,14 @@ import PlaceholderImage from "../components/PlaceholderImage.astro";
 
   @media (max-width: 720px) {
     .hero-copy {
-      margin-inline-start: 0.75rem;
+      margin-inline-start: 0;
       max-width: min(100% - 1.5rem, 22rem);
+      transform: translateX(-1.75rem);
+    }
+
+    .hero-logo {
+      width: 70%;
+      margin-inline: auto;
     }
   }
 
