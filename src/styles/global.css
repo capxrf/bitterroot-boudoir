@@ -176,12 +176,14 @@ p:last-child {
 }
 
 .btn-ghost {
-  background: transparent;
-  border-color: rgba(242, 235, 228, 0.45);
+  background: rgba(10, 9, 8, 0.55);
+  border-color: rgba(242, 235, 228, 0.4);
   color: var(--ink);
+  backdrop-filter: blur(8px);
 }
 
 .btn-ghost:hover {
+  background: rgba(10, 9, 8, 0.72);
   border-color: var(--accent);
   color: var(--accent);
 }

@@ -28,7 +28,8 @@ import PlaceholderImage from "../components/PlaceholderImage.astro";
           height="1180"
         />
       </h1>
-      <p class="lede reveal reveal-delay-1">Discover your own beauty.</p>
+      <!-- Tagline kept for later; hidden for now so CTAs sit under the logo. -->
+      <p class="lede hero-tagline reveal reveal-delay-1">Empowering Beauty</p>
       <div class="cta-row reveal reveal-delay-2">
         <a class="btn btn-primary" href="/contact">Book a session</a>
         <a class="btn btn-ghost" href="/gallery">View the gallery</a>
@@ -40,14 +41,14 @@ import PlaceholderImage from "../components/PlaceholderImage.astro";
     <div class="wrap intro-grid">
       <div>
         <p class="eyebrow">The experience</p>
-        <h2>High-end boudoir, made personal.</h2>
+        <h2>Personalized, premium boudoir photography.</h2>
       </div>
       <div>
         <p class="lede">
-          Bitterroot Boudoir is a specialized studio for clients who want more
-          than pretty pictures. Every session is guided, intentional, and
-          finished to a premium standard — so the final images feel like you,
-          at your most confident.
+          Boudoir photography should be about more than just taking photos. The experience
+          matters. We all photograph best when we feel relaxed, confident, and when we are having fun. 
+          A happy I strive to make every session feel personal and empowering, and I want every client to 
+          leave their session feeling great about themselves and their time on set.
         </p>
         <div class="cta-row">
           <a class="btn btn-ghost" href="/about">Meet the photographer</a>
@@ -142,8 +143,12 @@ import PlaceholderImage from "../components/PlaceholderImage.astro";
     font-size: clamp(1.1rem, 2vw, 1.3rem);
   }
 
+  .hero-tagline {
+    display: none;
+  }
+
   .hero .cta-row {
-    margin-top: 0.15rem;
+    margin-top: 0;
     justify-content: center;
   }
 
@@ -157,6 +162,11 @@ import PlaceholderImage from "../components/PlaceholderImage.astro";
     .hero-logo {
       width: 70%;
       margin-inline: auto;
+    }
+
+    .hero .cta-row {
+      flex-direction: column;
+      align-items: center;
     }
   }
 
@@ -175,7 +185,7 @@ import PlaceholderImage from "../components/PlaceholderImage.astro";
     .intro-grid {
       grid-template-columns: 0.9fr 1.1fr;
       gap: 3rem;
-      align-items: end;
+      align-items: start;
     }
 
     .preview-grid {

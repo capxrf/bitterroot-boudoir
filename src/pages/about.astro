@@ -15,31 +15,75 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <div class="bio-copy reveal reveal-delay-2">
           <p>
             I began my photographic journey in the wild, photographing landscapes
-            and the natural world. Nature taught me how to study a subject, and
-            how light can reveal moments of quiet drama and breathtaking beauty.
-            I learned that a photographer’s job isn’t to create beauty but rather
-            to find what’s already there and honor it through light and perspective.
+            and the natural world around me. Nature photography taught me how to
+            study a subject and discover how light can reveal moments of quiet
+            drama and breathtaking beauty. I learned that a photographer’s job
+            isn’t to create beauty, but rather to find what’s already there and
+            honor it through light and perspective.
           </p>
           <p>
             For me, boudoir is no different. Every body is its own unique
             landscape, shaped by curves, lines, and stories. When light falls
-            across it just right, it reveals an elegance that can be emotionally
+            just right, it reveals an elegance that can be emotionally
             moving.
           </p>
           <p>
-            My goal is to help you fall in love with your own image. Not just
-            with a favorite photo or two, but with the person in them. I want you
-            to leave our session seeing yourself the way I see you, and carrying
-            that confidence long after the images are delivered.
+            My goal is to help you fall in love with your own image — not just
+            with a favorite photo or two, but with the person in them. Hearing
+            that I’ve played a small part in helping a client feel better about
+            themselves and leave a session more confident is indescribably
+            rewarding.
           </p>
           <p>
-            There's beauty in all of us and we all owe it to ourselves to
+            There's beauty in all of us, and we all owe it to ourselves to
             discover it.
           </p>
         </div>
 
-        <div class="cta-row reveal reveal-delay-3">
+        <div class="cta-stack reveal reveal-delay-3">
           <a class="btn btn-primary" href="/contact">Contact</a>
+          <details class="more-about">
+            <summary class="more-about-toggle">More about me</summary>
+            <div class="more-about-body">
+              <p>
+                I live just outside of Stevensville, Montana with my beautiful wife
+                Cheri (that's her at the top of my homepage!) and our mischievous cat
+                Winkis (no, I did not name him). It was actually Cheri who encouraged
+                me to begin offering my boudoir photo services publicly. After doing
+                professional-level sessions with her and a number of our friends, she
+                told me, "Everyone should do this. Everyone should feel this good
+                about themselves." I agree.
+              </p>
+              <p>
+                Outside of boudoir, I am still a passionate nature and landscape
+                photographer, and you may find me trudging up our local trails chasing
+                daybreak or storm clouds with camera in tow. The outdoors are in our
+                blood, and my wife and I spend as much time as we can hiking, fishing,
+                camping, foraging, and generally frolicking in nature.
+              </p>
+              <p>
+                Educationally, I have a degree in Aerospace Engineering (sounds fancy,
+                eh?). I still use my background practically and creatively by designing
+                small products and solving problems for a few companies. Mostly, the
+                technical background has enhanced my knowledge and appreciation for the
+                more complex aspects of my endeavors. Be careful when asking me too much
+                about the technical components of photography, cameras, lenses, or
+                software… I tend to lose myself in it.
+              </p>
+              <p>
+                Some will ask me what it's like being a male photographer in the boudoir
+                genre. Really, it's the same as anyone pursuing any other form of art.
+                Both my wife and I are artists in different mediums, and we both have a
+                great appreciation for the human form. I don't see the gender of the
+                photographer as being important in capturing a photo, but I also
+                understand some clients would prefer a same-gender photographer for more
+                intimate photography, and I can respect that. My goal is to perform my
+                job as a professional, ensure every client has as good an experience as
+                possible, and do my best to provide a comfortable and respectful
+                environment for everyone.
+              </p>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -58,7 +102,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   .photographer {
     display: grid;
     gap: var(--space-md);
-    align-items: end;
+    align-items: start;
   }
 
   .portrait {
@@ -87,10 +131,74 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     margin: 0;
   }
 
+  .cta-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.15rem;
+    margin-top: 1.75rem;
+  }
+
+  .more-about {
+    width: min(100%, 36rem);
+  }
+
+  .more-about-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    padding: 0.2rem 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink-soft);
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-color: rgba(181, 169, 160, 0.45);
+    cursor: pointer;
+    list-style: none;
+    transition: color 0.25s var(--ease), text-decoration-color 0.25s var(--ease);
+  }
+
+  .more-about-toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  .more-about-toggle:hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
+  }
+
+  .more-about[open] .more-about-toggle {
+    color: var(--accent);
+    text-decoration-color: rgba(var(--accent-rgb), 0.55);
+  }
+
+  .more-about-body {
+    display: grid;
+    gap: 1em;
+    margin-top: 1.15rem;
+    padding-top: 1.15rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .more-about-body p {
+    margin: 0;
+  }
+
   @media (min-width: 860px) {
     .photographer {
       grid-template-columns: 1.15fr 0.85fr;
       gap: 3rem;
+    }
+
+    .portrait {
+      position: sticky;
+      top: calc(var(--nav-h) + 1rem);
     }
   }
 </style>
