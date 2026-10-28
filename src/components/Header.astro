@@ -1,5 +1,6 @@
 ---
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isHome = pathname === "/";
 
 const links = [
   { href: "/", label: "Home" },
@@ -11,8 +12,23 @@ const links = [
 ];
 ---
 
-<header class="site-header" data-header>
+<header class:list={["site-header", { "has-brand": !isHome }]} data-header>
   <div class="wrap header-inner">
+    {
+      !isHome && (
+        <a class="header-brand" href="/">
+          <img
+            src="/images/brand/logo-mark.png"
+            alt=""
+            width="885"
+            height="885"
+            decoding="async"
+          />
+          <span class="header-brand-name">Bitterroot Boudoir</span>
+        </a>
+      )
+    }
+
     <button
       class="nav-toggle"
       type="button"
@@ -58,6 +74,10 @@ const links = [
       backdrop-filter 0.3s var(--ease);
   }
 
+  .site-header.has-brand {
+    border-bottom-color: var(--line);
+  }
+
   .site-header.is-scrolled,
   .site-header.is-open {
     background: rgba(18, 16, 15, 0.9);
@@ -71,6 +91,62 @@ const links = [
     justify-content: flex-end;
     height: 100%;
     gap: 1rem;
+  }
+
+  .site-header.has-brand .header-inner {
+    justify-content: space-between;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-width: 0;
+    flex-shrink: 1;
+    text-decoration: none;
+    color: var(--accent);
+    transition: opacity 0.25s var(--ease), color 0.25s var(--ease);
+  }
+
+  .header-brand:hover {
+    opacity: 0.88;
+    color: var(--accent-hover);
+  }
+
+  .header-brand img {
+    display: block;
+    height: 2.85rem;
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .header-brand-name {
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 480px) {
+    .header-brand img {
+      height: 3rem;
+    }
+
+    .header-brand-name {
+      font-size: 1.7rem;
+    }
+  }
+
+  @media (min-width: 861px) {
+    .header-brand img {
+      height: 2.65rem;
+    }
+
+    .header-brand-name {
+      font-size: 1.55rem;
+    }
   }
 
   .site-nav {
@@ -153,13 +229,18 @@ const links = [
       width: 100%;
       max-width: none;
       margin-inline: 0;
-      padding-inline: 0;
+      padding-inline: 1rem;
     }
 
     .nav-toggle {
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      margin-left: auto;
+    }
+
+    .site-header.has-brand .nav-toggle {
+      margin-left: 0;
     }
 
     .site-nav {

@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Page not found"
+  description="That page could not be found. Browse the gallery, packages, or get in touch with Bitterroot Boudoir."
+>
+  <section class="page-hero not-found">
+    <div class="wrap">
+      <p class="eyebrow reveal">404</p>
+      <h1 class="reveal reveal-delay-1">This page wandered off.</h1>
+      <p class="lede reveal reveal-delay-2">
+        The link may be outdated, the page may have moved, or you may be a bit lost. Here's a way back
+        to the good stuff.
+      </p>
+      <div class="cta-row reveal reveal-delay-3">
+        <a class="btn btn-primary" href="/">Back home</a>
+        <a class="btn btn-ghost" href="/gallery">View the gallery</a>
+        <a class="btn btn-ghost" href="/contact">Contact</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: calc(100svh - var(--nav-h));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-bottom: var(--space-xl);
+  }
+
+  .not-found .wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .not-found h1 {
+    max-width: 12ch;
+  }
+
+  .not-found .lede {
+    max-width: 32rem;
+    margin-inline: auto;
+  }
+
+  .not-found .cta-row {
+    justify-content: center;
+  }
+</style>
