@@ -1,0 +1,169 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const updated = "October 28, 2026";
+---
+
+<BaseLayout
+  title="Privacy"
+  description="How Bitterroot Boudoir collects and uses contact and site information in Stevensville, Montana."
+>
+  <section class="page-hero">
+    <div class="wrap privacy">
+      <p class="eyebrow reveal">Privacy</p>
+      <h1 class="reveal reveal-delay-1">How I handle your information.</h1>
+      <p class="lede reveal reveal-delay-2">
+        I collect only what I need to run the business and serve clients — nothing is sold.
+      </p>
+      <p class="privacy-updated reveal reveal-delay-3">Last updated {updated}</p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="wrap privacy-body">
+      <section>
+        <h2>What I collect</h2>
+        <p>
+          When you use the contact form or email me, I may receive your name,
+          email address, phone number (if you share it), package interest, hair
+          &amp; makeup preference, and the message you write. If we work
+          together, I may also keep booking, session, and delivery details needed
+          to complete your experience.
+        </p>
+      </section>
+
+      <section>
+        <h2>Why I use it</h2>
+        <ul>
+          <li>To reply to inquiries and plan sessions</li>
+          <li>To manage bookings, artwork, and client communication</li>
+          <li>
+            To send occasional studio updates or offers by email or phone once a
+            mailing list is active — you can opt out anytime
+          </li>
+          <li>
+            To measure advertising and site performance (including Google Ads
+            conversion and related tracking when those tools are turned on)
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Formspree and other tools</h2>
+        <p>
+          Contact form submissions may be processed by
+          <a href="https://formspree.io/legal/privacy-policy/" target="_blank" rel="noopener noreferrer"
+            >Formspree</a
+          >
+          and delivered to my business inbox. Formspree acts as a service
+          provider for that handoff. I may also use email or CRM tools to keep
+          contact lists organized, and Google Ads / Google analytics-style tools
+          to understand whether ads and pages are working. Those providers
+          process data under their own privacy terms.
+        </p>
+      </section>
+
+      <section>
+        <h2>Cookies and ads</h2>
+        <p>
+          When Google Ads or similar measurement is active, cookies or similar
+          technologies may be used to track visits, ad clicks, and conversions.
+          This helps me know what’s effective — not to build a dossier on you.
+          You can limit ad personalization through your browser settings and
+          Google’s ad settings.
+        </p>
+      </section>
+
+      <section>
+        <h2>How long I keep it</h2>
+        <p>
+          Inquiry and client records are kept as long as they’re useful for
+          follow-up, active work, or ordinary business records, then removed or
+          archived when no longer needed. Mailing-list contacts stay until you
+          unsubscribe or ask to be removed.
+        </p>
+      </section>
+
+      <section>
+        <h2>Your choices</h2>
+        <p>
+          Email
+          <a href="mailto:hello@bitterrootboudoir.com">hello@bitterrootboudoir.com</a>
+          to ask what I have on file, correct something, or request deletion /
+          removal from updates. For marketing messages, use the unsubscribe link
+          when available, or just reply and ask to be taken off the list.
+        </p>
+      </section>
+
+      <section>
+        <h2>Sharing</h2>
+        <p>
+          I don’t sell your information. I only share what’s needed with trusted
+          processors (like Formspree, email hosts, or ad platforms) to run the
+          site and studio, or when the law requires it.
+        </p>
+      </section>
+
+      <p class="privacy-note">
+        This page is a practical studio notice, not formal legal advice. If my
+        tools or practices change in a meaningful way, I’ll update it here.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .privacy .lede {
+    max-width: 36rem;
+  }
+
+  .privacy-updated {
+    margin: 1rem 0 0;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+
+  .privacy-body {
+    display: grid;
+    gap: var(--space-md);
+    max-width: 42rem;
+  }
+
+  .privacy-body section {
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .privacy-body h2 {
+    margin: 0;
+    font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  }
+
+  .privacy-body p,
+  .privacy-body li {
+    color: var(--ink-soft);
+  }
+
+  .privacy-body p {
+    margin: 0;
+  }
+
+  .privacy-body ul {
+    margin: 0;
+    padding-left: 1.15rem;
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .privacy-body a {
+    color: var(--accent);
+    text-decoration-color: rgba(var(--accent-rgb), 0.45);
+  }
+
+  .privacy-note {
+    margin: 0;
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--line);
+    font-size: 0.9rem;
+  }
+</style>

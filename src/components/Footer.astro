@@ -73,6 +73,8 @@ const facebookUrl = "https://www.facebook.com/";
     <p class="footer-meta">
       Stevensville, Montana
       <span aria-hidden="true">·</span>
+      <a class="footer-meta-link" href="/privacy">Privacy</a>
+      <span aria-hidden="true">·</span>
       &copy; {year} Bitterroot Boudoir
     </p>
   </div>
@@ -174,6 +176,18 @@ const facebookUrl = "https://www.facebook.com/";
   .footer-meta span {
     margin-inline: 0.4rem;
     opacity: 0.55;
+  }
+
+  .footer-meta-link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    text-decoration-color: rgba(181, 169, 160, 0.45);
+  }
+
+  .footer-meta-link:hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
   }
 
   @media (max-width: 720px) {

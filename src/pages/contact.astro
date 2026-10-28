@@ -141,6 +141,13 @@ const formAction = formspreeId
         <button class="btn btn-primary" type="submit" disabled={!formAction}>
           Send inquiry
         </button>
+
+        <p class="form-privacy">
+          I use your details to reply to this inquiry. I may also use your email
+          or phone for occasional studio updates — you can opt out anytime.
+          Nothing is sold. See the
+          <a href="/privacy">privacy notice</a>.
+        </p>
       </form>
     </div>
   </section>
@@ -234,6 +241,18 @@ const formAction = formspreeId
     opacity: 0.55;
     cursor: not-allowed;
     transform: none;
+  }
+
+  .form-privacy {
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+
+  .form-privacy a {
+    color: var(--accent);
+    text-decoration-color: rgba(var(--accent-rgb), 0.45);
   }
 
   code {

@@ -5,4 +5,7 @@ export default defineConfig({
   site: 'https://bitterrootboudoir.com',
   output: 'static',
   compressHTML: true,
+  devToolbar: {
+    enabled: false,
+  },
 });
