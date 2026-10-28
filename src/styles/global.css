@@ -8,8 +8,8 @@
   --accent-hover: #e6b6a3;
   --accent-rgb: 217, 165, 146;
   --line: rgba(242, 235, 228, 0.12);
-  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --font-body: "Figtree", "Segoe UI", sans-serif;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-body: "Outfit", "Segoe UI", sans-serif;
   --space-xs: 0.5rem;
   --space-sm: 1rem;
   --space-md: 1.75rem;
@@ -64,9 +64,9 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 400;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  font-weight: 500;
+  line-height: 1.18;
+  letter-spacing: 0.01em;
   margin: 0 0 0.6em;
 }
 

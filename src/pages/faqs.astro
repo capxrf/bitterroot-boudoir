@@ -1,0 +1,154 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const faqs = [
+  {
+    question: "Who should book a boudoir photo shoot?",
+    answer: `In the words of my wife, "Everyone should do this at least once!" Anyone who wants to feel confident in their own skin and celebrate their inner and outer beauty should book a session. Clients of all ages (18+) and stages of life can have fabulous results. I am absolutely convinced that everyone has beauty within them and photography can help boost that awareness and be empowering. Sessions are tailored to your comfort level, style, and goals. Whether it's photos for a gift to a partner or spouse, celebrating a personal milestone, or to help learn to love yourself, these sessions can be powerful. One of the most moving statements I've heard from a client was "I had been struggling with my self image recently and this experience and the photos helped me feel beautiful again." I wish that reaction upon everyone.`,
+  },
+  {
+    question: "What should I wear?",
+    answer:
+      "Bring outfits that make you personally feel beautiful and comfortable. Lace, silk, off-shoulder shirts, jewelry, and meaningful personal items all work well. We'll talk through wardrobe ideas before your session so you feel prepared. Most importantly, you should wear what makes you feel good about yourself.",
+  },
+  {
+    question: "Do I have to get undressed?",
+    answer:
+      "Only if you want to! Some clients prefer to stay fully covered. Others wish to go more risque, including implied nudity or fully nude photos into their set. It's entirely up to you! It's more common that I hear clients wish they'd have pushed their boundaries more than less, but I will not pressure you one way or another. This is a question I ask ahead of the session to ensure we are on the same page to start with. You are welcome to change your mind at any point during the session and I will adapt to it as we go.",
+  },
+  {
+    question: "Do I need professional hair and makeup?",
+    answer:
+      "Many clients love the photo results with professionally done hair and makeup. I offer exceptionally skilled hair and makeup services on-site from some of the most talented artists in the area. You can also choose to arrive with your own hair and makeup done beforehand. I recommend overall simple styles that highlight your natural features so we can capture your own beauty rather than attempting to look like anyone else (this is about exposing YOUR beauty!). The artists I work with are fantastic at this. Flowing hairstyles and natural makeup that accents your natural skin tone and facial features is flattering on nearly everyone.",
+  },
+  {
+    question: "Where do sessions take place?",
+    answer:
+      "Sessions are based in or near Stevensville, Montana, at one of a few venues depending on the package and your vision. Outdoor session locations can vary by season. We'll choose the setting that best supports the look and mood you want. All venues are selected to be private of course. I do offer to travel on-site to special locations upon request, but will advise that not all locations are conducive to great photography. Call me directly to discuss special location requests. ",
+  },
+  {
+    question: "How long is a session?",
+    answer:
+      "Most sessions run between one and three hours depending on the package. That includes time to settle in, change looks, and shoot without feeling rushed. Add another hour for any session with on-site hair & makeup added on.",
+  },
+  {
+    question: "What final product styles can I have?",
+    answer:
+      "I offer multiple options for final photo delivery. Common requests are bound photo books (albums) containing the selected photos from your session, printed photos for framing, fully framed photos from small to lifesize, or simply digital files. I strongly suggest all clients select at least one form of physical prints. It seems we all walk around with phones full of digital photos and we can forget how powerful and precious physical photos can be. A good photo can become UNBELIEVABLY great in a print. ",
+  },
+  {
+    question: "Is the session private?",
+    answer:
+      "Yes. Your comfort and privacy come first. Sessions are completely private. Final photo galleries are also private by default, and nothing is shared publicly without your explicit permission. I do greatly appreciate any opportunitites to share my work in my portfolio and ask my clients if there are any images they are willing for me to share, but I will never do so without confirming with the client.",
+  },
+  {
+    question: "How do I book?",
+    answer:
+      "Start with the contact form or email. We'll schedule a short introductory call to talk through your goals, choose a package, and lock in your date. I pride myself on clear communication and will strive to keep you informed at every step.",
+  },
+];
+
+/** Italicize "quoted phrases" in FAQ answers. */
+const formatAnswer = (text) =>
+  text.replace(/"([^"]+)"/g, "<em>“$1”</em>");
+---
+
+<BaseLayout
+  title="FAQs"
+  description="Frequently asked questions about boudoir sessions with Bitterroot Boudoir in Stevensville, Montana."
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow reveal">FAQs</p>
+      <h1 class="reveal reveal-delay-1">Questions, answered.</h1>
+      <p class="lede reveal reveal-delay-2">
+        A few things clients often ask before booking. If you don't see your
+        question here, reach out. I'm happy to answer any questions.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="wrap faq-list">
+      {
+        faqs.map((faq) => (
+          <details class="faq-item">
+            <summary>{faq.question}</summary>
+            <p set:html={formatAnswer(faq.answer)} />
+          </details>
+        ))
+      }
+    </div>
+
+    <div class="wrap faq-cta">
+      <p>Still deciding?</p>
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="/packages">See packages</a>
+        <a class="btn btn-primary" href="/contact">Contact</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .faq-list {
+    display: grid;
+    gap: 0.65rem;
+    max-width: 46rem;
+  }
+
+  .faq-item {
+    border: 1px solid var(--line);
+    background: rgba(0, 0, 0, 0.18);
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 1.1rem 1.25rem;
+    font-weight: 500;
+    transition: color 0.25s var(--ease);
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: "+";
+    float: right;
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .faq-item[open] summary::after {
+    content: "–";
+  }
+
+  .faq-item summary:hover {
+    color: var(--accent);
+  }
+
+  .faq-item p {
+    margin: 0;
+    padding: 0 1.25rem 1.2rem;
+    max-width: 40rem;
+  }
+
+  .faq-cta {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--line);
+  }
+
+  .faq-cta p {
+    margin: 0 0 0.35rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--ink);
+  }
+
+  .faq-cta .cta-row {
+    margin-top: 1rem;
+  }
+</style>

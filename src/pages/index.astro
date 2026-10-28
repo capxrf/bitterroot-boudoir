@@ -43,7 +43,7 @@ import PlaceholderImage from "../components/PlaceholderImage.astro";
         <p class="eyebrow">The experience</p>
         <h2>Personalized, premium boudoir photography.</h2>
       </div>
-      <div>
+      <div class="intro-body">
         <p class="lede">
           Boudoir photography should be about more than just taking photos. The experience
           matters. We all photograph best when we feel relaxed, confident, and when we are having fun. 
@@ -62,7 +62,7 @@ import PlaceholderImage from "../components/PlaceholderImage.astro";
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Selected work</p>
-        <h2>A quieter kind of bold.</h2>
+        <h2>Beauty captured.</h2>
       </div>
       <div class="preview-grid">
         <PlaceholderImage label="Gallery preview 01" aspect="3 / 4" />
@@ -186,6 +186,10 @@ import PlaceholderImage from "../components/PlaceholderImage.astro";
       grid-template-columns: 0.9fr 1.1fr;
       gap: 3rem;
       align-items: start;
+    }
+
+    .intro-body {
+      align-self: center;
     }
 
     .preview-grid {
