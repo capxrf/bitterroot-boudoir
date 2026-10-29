@@ -6,6 +6,7 @@ const formspreeId = import.meta.env.PUBLIC_FORMSPREE_ID;
 const formAction = formspreeId
   ? `https://formspree.io/f/${formspreeId}`
   : "";
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 
 <BaseLayout
@@ -159,6 +160,24 @@ const formAction = formspreeId
           ></textarea>
         </label>
 
+        {
+          turnstileSiteKey ? (
+            <div
+              class="cf-turnstile"
+              data-sitekey={turnstileSiteKey}
+              data-theme="dark"
+            />
+          ) : (
+            formAction && (
+              <p class="form-banner" role="status">
+                Add <code>PUBLIC_TURNSTILE_SITE_KEY</code> to <code>.env</code>{" "}
+                (and the secret key in Formspree) so spam protection can finish
+                loading.
+              </p>
+            )
+          )
+        }
+
         <button class="btn btn-primary" type="submit" disabled={!formAction}>
           Send inquiry
         </button>
@@ -213,6 +232,10 @@ const formAction = formspreeId
 
   .form-error a {
     color: var(--accent);
+  }
+
+  .cf-turnstile {
+    margin-top: 0.15rem;
   }
 
   label {
@@ -371,6 +394,7 @@ const formAction = formspreeId
       throw new Error(`Formspree error ${response.status}`);
     } catch {
       errorEl && (errorEl.hidden = false);
+      if (window.turnstile) window.turnstile.reset();
       if (submitBtn instanceof HTMLButtonElement) {
         submitBtn.disabled = false;
         submitBtn.textContent = "Send inquiry";
@@ -378,3 +402,11 @@ const formAction = formspreeId
     }
   });
 </script>
+
+{turnstileSiteKey && (
+  <script
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+    async
+    defer
+  />
+)}
