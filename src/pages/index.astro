@@ -1,6 +1,9 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import PlaceholderImage from "../components/PlaceholderImage.astro";
+import { getHomeImages } from "../lib/gallery";
+
+const homeImages = getHomeImages(6);
 ---
 
 <BaseLayout title="Bitterroot Boudoir" bodyClass="home">
@@ -64,16 +67,249 @@ import PlaceholderImage from "../components/PlaceholderImage.astro";
         <p class="eyebrow">Selected work</p>
         <h2>Beauty captured.</h2>
       </div>
-      <div class="preview-grid">
-        <PlaceholderImage label="Gallery preview 01" aspect="3 / 4" />
-        <PlaceholderImage label="Gallery preview 02" aspect="3 / 4" />
-        <PlaceholderImage label="Gallery preview 03" aspect="3 / 4" />
-      </div>
-      <div class="cta-row">
+    </div>
+
+    {
+      homeImages.length > 0 && (
+        <div class="carousel" data-carousel data-count={homeImages.length}>
+          <div
+            class="carousel-track"
+            data-carousel-track
+            tabindex="0"
+            aria-label="Selected work carousel"
+          >
+            {
+              [0, 1, 2].flatMap((set) =>
+                homeImages.map((image, index) => (
+                  <a
+                    class="carousel-slide"
+                    href="/gallery"
+                    data-carousel-slide
+                    data-index={index}
+                    data-set={set}
+                    aria-hidden={set === 1 ? undefined : "true"}
+                    tabindex={set === 1 ? undefined : -1}
+                    aria-label={`View gallery — photograph ${image.id}`}
+                  >
+                    <Image
+                      src={image.src}
+                      alt={
+                        set === 1
+                          ? `Selected boudoir photograph ${image.id} by Bitterroot Boudoir`
+                          : ""
+                      }
+                      widths={[720, 1080, 1600]}
+                      sizes="(min-width: 900px) 28rem, 70vw"
+                      quality={80}
+                      formats={["avif", "webp"]}
+                      loading={set === 1 && index === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                      class="carousel-photo"
+                    />
+                  </a>
+                )),
+              )
+            }
+          </div>
+          {
+            homeImages.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  class="carousel-edge carousel-edge-prev"
+                  data-carousel-prev
+                  aria-label="Previous photograph"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M15 4L7 12l8 8"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="carousel-edge carousel-edge-next"
+                  data-carousel-next
+                  aria-label="Next photograph"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M9 4l8 8-8 8"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </>
+            )
+          }
+        </div>
+      )
+    }
+
+    <div class="wrap">
+      <div class="cta-row preview-cta">
         <a class="btn btn-primary" href="/gallery">Explore the full gallery</a>
       </div>
     </div>
   </section>
+
+  {
+    homeImages.length > 1 && (
+      <script>
+        const root = document.querySelector("[data-carousel]");
+        const track = root?.querySelector("[data-carousel-track]");
+        const slides = root ? [...root.querySelectorAll("[data-carousel-slide]")] : [];
+        const prev = root?.querySelector("[data-carousel-prev]");
+        const next = root?.querySelector("[data-carousel-next]");
+        const count = Number(root?.getAttribute("data-count") || 0);
+
+        if (root && track && slides.length > 1 && count > 1) {
+          const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          let position = count;
+          let timer;
+          let resumeTimer;
+          let normalizing = false;
+
+          function centeredScrollLeft(slide) {
+            const trackRect = track.getBoundingClientRect();
+            const slideRect = slide.getBoundingClientRect();
+            return (
+              track.scrollLeft +
+              (slideRect.left - trackRect.left) +
+              slideRect.width / 2 -
+              trackRect.width / 2
+            );
+          }
+
+          function scrollToPosition(nextPosition, behavior = "smooth") {
+            position = nextPosition;
+            track.scrollTo({
+              left: centeredScrollLeft(slides[position]),
+              behavior: reduceMotion ? "auto" : behavior,
+            });
+          }
+
+          function nearestPosition() {
+            const trackRect = track.getBoundingClientRect();
+            const center = trackRect.left + trackRect.width / 2;
+            let closest = 0;
+            let closestDist = Infinity;
+            slides.forEach((slide, i) => {
+              const slideRect = slide.getBoundingClientRect();
+              const slideCenter = slideRect.left + slideRect.width / 2;
+              const dist = Math.abs(slideCenter - center);
+              if (dist < closestDist) {
+                closestDist = dist;
+                closest = i;
+              }
+            });
+            return closest;
+          }
+
+          function normalize() {
+            if (normalizing) return;
+            position = nearestPosition();
+
+            if (position < count) {
+              normalizing = true;
+              scrollToPosition(position + count, "auto");
+              requestAnimationFrame(() => {
+                normalizing = false;
+              });
+            } else if (position >= count * 2) {
+              normalizing = true;
+              scrollToPosition(position - count, "auto");
+              requestAnimationFrame(() => {
+                normalizing = false;
+              });
+            }
+          }
+
+          function step(delta) {
+            scrollToPosition(nearestPosition() + delta);
+          }
+
+          function stopAutoplay() {
+            window.clearInterval(timer);
+            window.clearTimeout(resumeTimer);
+            timer = undefined;
+          }
+
+          function startAutoplay() {
+            if (reduceMotion) return;
+            stopAutoplay();
+            timer = window.setInterval(() => step(1), 4500);
+          }
+
+          function pauseThenResume() {
+            stopAutoplay();
+            resumeTimer = window.setTimeout(startAutoplay, 8000);
+          }
+
+          let scrollEndTimer;
+          track.addEventListener(
+            "scroll",
+            () => {
+              if (normalizing) return;
+              position = nearestPosition();
+              window.clearTimeout(scrollEndTimer);
+              scrollEndTimer = window.setTimeout(normalize, 120);
+            },
+            { passive: true },
+          );
+
+          prev?.addEventListener("click", () => {
+            step(-1);
+            pauseThenResume();
+          });
+
+          next?.addEventListener("click", () => {
+            step(1);
+            pauseThenResume();
+          });
+
+          track.addEventListener("pointerdown", pauseThenResume);
+          track.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowLeft") {
+              event.preventDefault();
+              step(-1);
+              pauseThenResume();
+            }
+            if (event.key === "ArrowRight") {
+              event.preventDefault();
+              step(1);
+              pauseThenResume();
+            }
+          });
+
+          root.addEventListener("mouseenter", stopAutoplay);
+          root.addEventListener("mouseleave", startAutoplay);
+
+          const imageLoads = slides.map((slide) => {
+            const img = slide.querySelector("img");
+            if (!img || img.complete) return Promise.resolve();
+            return new Promise((resolve) => {
+              img.addEventListener("load", resolve, { once: true });
+              img.addEventListener("error", resolve, { once: true });
+            });
+          });
+
+          scrollToPosition(count, "auto");
+          Promise.all(imageLoads).then(() => scrollToPosition(position, "auto"));
+          startAutoplay();
+        }
+      </script>
+    )
+  }
 </BaseLayout>
 
 <style>
@@ -175,10 +411,103 @@ import PlaceholderImage from "../components/PlaceholderImage.astro";
     gap: var(--space-md);
   }
 
-  .preview-grid {
-    display: grid;
-    gap: 0.85rem;
+  .carousel {
+    position: relative;
+    width: min(100% - 1.25rem, calc(var(--max) + 6rem));
+    margin-inline: auto;
     margin-bottom: 1.75rem;
+  }
+
+  .carousel-edge {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 3.4rem;
+    padding: 0;
+    border: 0;
+    transform: translateY(-50%);
+    background: rgba(18, 16, 15, 0.42);
+    color: rgba(242, 235, 228, 0.92);
+    cursor: pointer;
+    transition:
+      background 0.25s var(--ease),
+      color 0.25s var(--ease);
+  }
+
+  .carousel-edge svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .carousel-edge:hover,
+  .carousel-edge:focus-visible {
+    background: rgba(18, 16, 15, 0.62);
+    color: var(--ink);
+  }
+
+  .carousel-edge:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .carousel-edge-prev {
+    left: 0;
+  }
+
+  .carousel-edge-next {
+    right: 0;
+  }
+
+  .carousel-track {
+    --carousel-h: clamp(22rem, 58vh, 34rem);
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: 0.85rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    padding-inline: 50%;
+    scrollbar-width: none;
+    outline: none;
+  }
+
+  .carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-slide {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    flex: 0 0 auto;
+    display: block;
+    height: var(--carousel-h);
+    width: max-content;
+    text-decoration: none;
+  }
+
+  .carousel-slide:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .carousel-slide :global(picture) {
+    display: block;
+    height: 100%;
+  }
+
+  .carousel-photo {
+    height: 100%;
+    width: auto;
+    max-width: none;
+  }
+
+  .preview-cta {
+    margin-top: 0;
+    justify-content: center;
   }
 
   @media (min-width: 800px) {
@@ -192,9 +521,20 @@ import PlaceholderImage from "../components/PlaceholderImage.astro";
       align-self: center;
     }
 
-    .preview-grid {
-      grid-template-columns: repeat(3, 1fr);
+    .carousel-track {
+      --carousel-h: clamp(24rem, 62vh, 38rem);
       gap: 1rem;
     }
   }
+
+  @media (max-width: 720px) {
+    .carousel {
+      width: min(100% - 0.85rem, calc(var(--max) + 6rem));
+    }
+
+    .carousel-track {
+      --carousel-h: clamp(20rem, 52vh, 28rem);
+    }
+  }
+
 </style>

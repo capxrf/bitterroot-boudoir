@@ -1,15 +1,27 @@
 ---
+import { Image, getImage } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import PlaceholderImage from "../components/PlaceholderImage.astro";
+import GalleryLightbox from "../components/GalleryLightbox.astro";
+import { getGalleryImages } from "../lib/gallery";
 
-const images = Array.from({ length: 18 }, (_, i) => {
-  const n = String(i + 1).padStart(2, "0");
-  const tall = i % 5 === 0 || i % 7 === 0;
-  return {
-    label: `Gallery image ${n}`,
-    aspect: tall ? "3 / 5" : "3 / 4",
-  };
-});
+const sourceImages = getGalleryImages();
+
+const images = await Promise.all(
+  sourceImages.map(async (image) => {
+    const full = await getImage({
+      src: image.src,
+      width: 2560,
+      format: "webp",
+      quality: 82,
+    });
+
+    return {
+      ...image,
+      fullSrc: full.src,
+      alt: `Boudoir photograph ${image.id} by Bitterroot Boudoir`,
+    };
+  }),
+);
 ---
 
 <BaseLayout
@@ -19,24 +31,46 @@ const images = Array.from({ length: 18 }, (_, i) => {
   <section class="page-hero">
     <div class="wrap">
       <p class="eyebrow reveal">Gallery</p>
-      <h1 class="reveal reveal-delay-1">Example images from real sessions.</h1>
+      <h1 class="reveal reveal-delay-1">Selected work from real sessions.</h1>
       <p class="lede reveal reveal-delay-2">
-        Mood, detail, and finishing touches that define quality.
+        Mood, detail, and finishing that define the experience.
       </p>
     </div>
   </section>
 
   <section class="section-tight gallery-section">
     <div class="wrap">
-      <div class="gallery-grid">
-        {
-          images.map((image) => (
-            <figure class="gallery-item">
-              <PlaceholderImage label={image.label} aspect={image.aspect} />
-            </figure>
-          ))
-        }
-      </div>
+      {
+        images.length === 0 ? (
+          <p class="lede">Gallery images coming soon.</p>
+        ) : (
+          <div class="gallery-grid">
+            {images.map((image, index) => (
+              <figure class="gallery-item">
+                <button
+                  type="button"
+                  class="gallery-open"
+                  data-full={image.fullSrc}
+                  data-alt={image.alt}
+                  aria-label={`View larger: ${image.alt}`}
+                >
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    widths={[480, 800, 1200]}
+                    sizes="(min-width: 980px) 32vw, (min-width: 640px) 48vw, 92vw"
+                    quality={80}
+                    formats={["avif", "webp"]}
+                    loading={index < 6 ? "eager" : "lazy"}
+                    decoding="async"
+                    class="gallery-photo"
+                  />
+                </button>
+              </figure>
+            ))}
+          </div>
+        )
+      }
     </div>
   </section>
 
@@ -49,6 +83,8 @@ const images = Array.from({ length: 18 }, (_, i) => {
       <a class="btn btn-primary" href="/contact">Start the conversation</a>
     </div>
   </section>
+
+  {images.length > 0 && <GalleryLightbox />}
 </BaseLayout>
 
 <style>
@@ -60,15 +96,33 @@ const images = Array.from({ length: 18 }, (_, i) => {
   .gallery-item {
     break-inside: avoid;
     margin: 0 0 0.85rem;
+  }
+
+  .gallery-open {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: zoom-in;
     overflow: hidden;
   }
 
-  .gallery-item :global(.ph) {
+  .gallery-photo {
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
     transition: transform 0.55s var(--ease);
   }
 
-  .gallery-item:hover :global(.ph) {
+  .gallery-open:hover .gallery-photo,
+  .gallery-open:focus-visible .gallery-photo {
     transform: scale(1.03);
+  }
+
+  .gallery-open:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
   }
 
   .cta-band {
@@ -112,7 +166,8 @@ const images = Array.from({ length: 18 }, (_, i) => {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .gallery-item:hover :global(.ph) {
+    .gallery-open:hover .gallery-photo,
+    .gallery-open:focus-visible .gallery-photo {
       transform: none;
     }
   }

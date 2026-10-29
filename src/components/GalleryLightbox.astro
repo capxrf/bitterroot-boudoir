@@ -1,0 +1,101 @@
+---
+/**
+ * Client lightbox for gallery items.
+ * Expects buttons with class `gallery-open` and data-full / data-alt attributes.
+ */
+---
+
+<dialog class="lightbox" id="gallery-lightbox" aria-label="Enlarged photograph">
+  <button type="button" class="lightbox-close" data-lightbox-close aria-label="Close">
+    Close
+  </button>
+  <img class="lightbox-image" alt="" />
+</dialog>
+
+<script>
+  const dialog = document.getElementById("gallery-lightbox") as HTMLDialogElement | null;
+  const image = dialog?.querySelector(".lightbox-image") as HTMLImageElement | null;
+  if (!dialog || !image) throw new Error("Gallery lightbox missing");
+
+  const openers = document.querySelectorAll<HTMLButtonElement>(".gallery-open");
+
+  function openLightbox(src: string, alt: string) {
+    image.src = src;
+    image.alt = alt;
+    dialog.showModal();
+  }
+
+  function closeLightbox() {
+    dialog.close();
+    image.removeAttribute("src");
+    image.alt = "";
+  }
+
+  openers.forEach((button) => {
+    button.addEventListener("click", () => {
+      const src = button.dataset.full;
+      if (!src) return;
+      openLightbox(src, button.dataset.alt ?? "");
+    });
+  });
+
+  dialog.querySelectorAll("[data-lightbox-close]").forEach((el) => {
+    el.addEventListener("click", closeLightbox);
+  });
+
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) closeLightbox();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && dialog.open) closeLightbox();
+  });
+</script>
+
+<style is:global>
+  .lightbox {
+    margin: auto;
+    padding: 0;
+    border: 0;
+    max-width: min(96vw, 1600px);
+    max-height: 94vh;
+    background: transparent;
+    color: var(--ink);
+  }
+
+  .lightbox::backdrop {
+    background: rgba(10, 9, 8, 0.88);
+    backdrop-filter: blur(6px);
+  }
+
+  .lightbox-image {
+    display: block;
+    max-width: 96vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .lightbox-close {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1;
+    min-height: 2.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(242, 235, 228, 0.35);
+    background: rgba(10, 9, 8, 0.7);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .lightbox-close:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+</style>
