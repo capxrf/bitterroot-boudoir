@@ -184,6 +184,26 @@ const images = await Promise.all(
 </BaseLayout>
 
 <style>
+  .page-hero {
+    padding-bottom: 0.75rem;
+  }
+
+  .page-hero :global(.eyebrow) {
+    margin-bottom: 0.45rem;
+  }
+
+  .page-hero :global(h1) {
+    margin-bottom: 0.3em;
+  }
+
+  .page-hero :global(.lede) {
+    margin-bottom: 0;
+  }
+
+  .gallery-section {
+    padding-top: 0.75rem;
+  }
+
   .gallery-shell {
     width: min(100% - 1.5rem, 94rem);
     margin-inline: auto;

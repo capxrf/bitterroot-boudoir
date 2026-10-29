@@ -65,7 +65,7 @@ const homeImages = getHomeImages(6);
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow">Selected work</p>
-        <h2>Beauty captured.</h2>
+        <h2>Beauty explored</h2>
       </div>
     </div>
 
@@ -406,6 +406,32 @@ const homeImages = getHomeImages(6);
     }
   }
 
+  .intro {
+    padding-block: clamp(2.5rem, 5vw, 3.75rem);
+  }
+
+  .preview {
+    padding-block: clamp(2rem, 4vw, 3rem);
+  }
+
+  .intro :global(.eyebrow),
+  .preview :global(.eyebrow) {
+    margin-bottom: 0.45rem;
+  }
+
+  .intro :global(h2),
+  .preview :global(h2) {
+    margin-bottom: 0.35em;
+  }
+
+  .preview :global(.section-head) {
+    margin-bottom: 1.15rem;
+  }
+
+  .intro :global(.cta-row) {
+    margin-top: 1.25rem;
+  }
+
   .intro-grid {
     display: grid;
     gap: var(--space-md);
@@ -415,7 +441,7 @@ const homeImages = getHomeImages(6);
     position: relative;
     width: min(100% - 1.25rem, calc(var(--max) + 6rem));
     margin-inline: auto;
-    margin-bottom: 1.75rem;
+    margin-bottom: 1.25rem;
   }
 
   .carousel-edge {
