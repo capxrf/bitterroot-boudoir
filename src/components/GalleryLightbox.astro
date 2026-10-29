@@ -13,13 +13,13 @@
 </dialog>
 
 <script>
-  const dialog = document.getElementById("gallery-lightbox") as HTMLDialogElement | null;
-  const image = dialog?.querySelector(".lightbox-image") as HTMLImageElement | null;
+  const dialog = document.getElementById("gallery-lightbox");
+  const image = dialog?.querySelector(".lightbox-image");
   if (!dialog || !image) throw new Error("Gallery lightbox missing");
 
-  const openers = document.querySelectorAll<HTMLButtonElement>(".gallery-open");
+  const openers = document.querySelectorAll(".gallery-open");
 
-  function openLightbox(src: string, alt: string) {
+  function openLightbox(src, alt) {
     image.src = src;
     image.alt = alt;
     dialog.showModal();
@@ -40,11 +40,14 @@
   });
 
   dialog.querySelectorAll("[data-lightbox-close]").forEach((el) => {
-    el.addEventListener("click", closeLightbox);
+    el.addEventListener("click", (event) => {
+      event.stopPropagation();
+      closeLightbox();
+    });
   });
 
-  dialog.addEventListener("click", (event) => {
-    if (event.target === dialog) closeLightbox();
+  dialog.addEventListener("click", () => {
+    closeLightbox();
   });
 
   document.addEventListener("keydown", (event) => {
@@ -54,27 +57,40 @@
 
 <style is:global>
   .lightbox {
-    margin: auto;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
     padding: 0;
     border: 0;
-    max-width: min(96vw, 1600px);
-    max-height: 94vh;
-    background: transparent;
+    background: rgba(10, 9, 8, 0.88);
+    backdrop-filter: blur(6px);
     color: var(--ink);
+    cursor: zoom-out;
+  }
+
+  .lightbox:not([open]) {
+    display: none;
+  }
+
+  .lightbox[open] {
+    display: grid;
+    place-items: center;
   }
 
   .lightbox::backdrop {
-    background: rgba(10, 9, 8, 0.88);
-    backdrop-filter: blur(6px);
+    background: transparent;
   }
 
   .lightbox-image {
     display: block;
-    max-width: 96vw;
+    max-width: min(96vw, 1600px);
     max-height: 90vh;
     width: auto;
     height: auto;
     margin: 0 auto;
+    cursor: zoom-out;
   }
 
   .lightbox-close {

@@ -39,35 +39,37 @@ const images = await Promise.all(
   </section>
 
   <section class="section-tight gallery-section">
-    <div class="wrap">
+    <div class="gallery-shell">
       {
         images.length === 0 ? (
           <p class="lede">Gallery images coming soon.</p>
         ) : (
-          <div class="gallery-grid">
-            {images.map((image, index) => (
-              <figure class="gallery-item">
-                <button
-                  type="button"
-                  class="gallery-open"
-                  data-full={image.fullSrc}
-                  data-alt={image.alt}
-                  aria-label={`View larger: ${image.alt}`}
-                >
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    widths={[480, 800, 1200]}
-                    sizes="(min-width: 980px) 32vw, (min-width: 640px) 48vw, 92vw"
-                    quality={80}
-                    formats={["avif", "webp"]}
-                    loading={index < 6 ? "eager" : "lazy"}
-                    decoding="async"
-                    class="gallery-photo"
-                  />
-                </button>
-              </figure>
-            ))}
+          <div class="gallery-grid" data-gallery-grid>
+            {
+              images.map((image, index) => (
+                <figure class="gallery-item" data-reading-index={index}>
+                  <button
+                    type="button"
+                    class="gallery-open"
+                    data-full={image.fullSrc}
+                    data-alt={image.alt}
+                    aria-label={`View larger: ${image.alt}`}
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      widths={[480, 800, 1200]}
+                      sizes="(min-width: 980px) 32vw, (min-width: 640px) 48vw, 92vw"
+                      quality={80}
+                      formats={["avif", "webp"]}
+                      loading={index < 9 ? "eager" : "lazy"}
+                      decoding="async"
+                      class="gallery-photo"
+                    />
+                  </button>
+                </figure>
+              ))
+            }
           </div>
         )
       }
@@ -85,17 +87,130 @@ const images = await Promise.all(
   </section>
 
   {images.length > 0 && <GalleryLightbox />}
+
+  {
+    images.length > 0 && (
+      <script>
+        const grid = document.querySelector("[data-gallery-grid]");
+        if (grid) {
+          let lastCols = 0;
+          let resizeTimer;
+
+          function columnCount() {
+            if (window.matchMedia("(min-width: 980px)").matches) return 3;
+            if (window.matchMedia("(min-width: 640px)").matches) return 2;
+            return 1;
+          }
+
+          function shortestColumnIndex(columns) {
+            let best = 0;
+            let bestHeight = Number.POSITIVE_INFINITY;
+            columns.forEach((col, index) => {
+              const height = col.getBoundingClientRect().height;
+              if (height < bestHeight) {
+                bestHeight = height;
+                best = index;
+              }
+            });
+            return best;
+          }
+
+          function layout({ force = false } = {}) {
+            const cols = columnCount();
+            if (!force && cols === lastCols && grid.dataset.ready === "true") return;
+            lastCols = cols;
+
+            const items = [...grid.querySelectorAll(".gallery-item")].sort(
+              (a, b) =>
+                Number(a.getAttribute("data-reading-index")) -
+                Number(b.getAttribute("data-reading-index")),
+            );
+
+            grid.querySelectorAll(".gallery-col").forEach((col) => col.remove());
+
+            const columns = Array.from({ length: cols }, () => {
+              const col = document.createElement("div");
+              col.className = "gallery-col";
+              grid.appendChild(col);
+              return col;
+            });
+
+            // First row stays in reading order across the top.
+            items.slice(0, cols).forEach((item, index) => {
+              columns[index].appendChild(item);
+            });
+
+            // Remaining images fill the shortest column to avoid large gaps.
+            items.slice(cols).forEach((item) => {
+              columns[shortestColumnIndex(columns)].appendChild(item);
+            });
+
+            grid.dataset.ready = "true";
+          }
+
+          function relayoutWhenImagesSettle() {
+            const imgs = [...grid.querySelectorAll("img")];
+            let pending = imgs.filter((img) => !img.complete).length;
+            if (pending === 0) {
+              layout({ force: true });
+              return;
+            }
+
+            imgs.forEach((img) => {
+              if (img.complete) return;
+              const done = () => {
+                pending -= 1;
+                if (pending <= 0) layout({ force: true });
+              };
+              img.addEventListener("load", done, { once: true });
+              img.addEventListener("error", done, { once: true });
+            });
+          }
+
+          layout();
+          relayoutWhenImagesSettle();
+          window.addEventListener(
+            "resize",
+            () => {
+              window.clearTimeout(resizeTimer);
+              resizeTimer = window.setTimeout(() => layout({ force: true }), 150);
+            },
+            { passive: true },
+          );
+        }
+      </script>
+    )
+  }
 </BaseLayout>
 
 <style>
+  .gallery-shell {
+    width: min(100% - 1.5rem, 94rem);
+    margin-inline: auto;
+  }
+
   .gallery-grid {
-    columns: 1;
-    column-gap: 0.85rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    opacity: 0;
+  }
+
+  .gallery-grid[data-ready="true"] {
+    opacity: 1;
+    transition: opacity 0.25s var(--ease);
+  }
+
+  .gallery-col {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
   }
 
   .gallery-item {
-    break-inside: avoid;
-    margin: 0 0 0.85rem;
+    margin: 0;
   }
 
   .gallery-open {
@@ -141,6 +256,10 @@ const images = await Promise.all(
   }
 
   @media (max-width: 720px) {
+    .gallery-shell {
+      width: min(100% - 1rem, 94rem);
+    }
+
     .cta-band {
       flex-direction: column;
       align-items: center;
@@ -148,24 +267,21 @@ const images = await Promise.all(
     }
   }
 
-  @media (min-width: 640px) {
-    .gallery-grid {
-      columns: 2;
-    }
-  }
-
   @media (min-width: 980px) {
     .gallery-grid {
-      columns: 3;
-      column-gap: 1rem;
+      gap: 1rem;
     }
 
-    .gallery-item {
-      margin-bottom: 1rem;
+    .gallery-col {
+      gap: 1rem;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .gallery-grid[data-ready="true"] {
+      transition: none;
+    }
+
     .gallery-open:hover .gallery-photo,
     .gallery-open:focus-visible .gallery-photo {
       transform: none;
