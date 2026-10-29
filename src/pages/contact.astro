@@ -1,12 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { absoluteUrl, business } from "../lib/site";
+import { business } from "../lib/site";
 
 const formspreeId = import.meta.env.PUBLIC_FORMSPREE_ID;
 const formAction = formspreeId
   ? `https://formspree.io/f/${formspreeId}`
   : "";
-const thankYouUrl = absoluteUrl("/thank-you");
 ---
 
 <BaseLayout
@@ -47,14 +46,19 @@ const thankYouUrl = absoluteUrl("/thank-you");
         data-formspree-ready={formAction ? "true" : "false"}
       >
         <input type="hidden" name="_subject" value="New Bitterroot Boudoir inquiry" />
-        <input type="hidden" name="_next" value={thankYouUrl} />
+        {/*
+          Honeypot for Formspree. readonly + off-screen helps block Chrome autofill,
+          which otherwise fills _gotcha and falsely flags real submissions as spam.
+        */}
         <input
           type="text"
           name="_gotcha"
           class="hp"
+          value=""
           tabindex="-1"
-          autocomplete="off"
+          autocomplete="new-password"
           aria-hidden="true"
+          readonly
         />
 
         {
@@ -66,6 +70,12 @@ const thankYouUrl = absoluteUrl("/thank-you");
             </p>
           )
         }
+
+        <p class="form-error" data-form-error hidden role="alert">
+          Something went wrong sending your inquiry. Please try again, or email
+          me directly at{" "}
+          <a href={`mailto:${business.email}`}>{business.email}</a>.
+        </p>
 
         <div class="name-row">
           <label>
@@ -187,12 +197,22 @@ const thankYouUrl = absoluteUrl("/thank-you");
     border: 1px solid var(--line);
   }
 
-  .form-banner {
+  .form-banner,
+  .form-error {
     margin: 0;
     padding: 0.85rem 1rem;
     background: rgba(var(--accent-rgb), 0.1);
     border: 1px solid rgba(var(--accent-rgb), 0.28);
     font-size: 0.95rem;
+  }
+
+  .form-error {
+    background: rgba(180, 60, 60, 0.12);
+    border-color: rgba(180, 60, 60, 0.35);
+  }
+
+  .form-error a {
+    color: var(--accent);
   }
 
   label {
@@ -283,6 +303,8 @@ const thankYouUrl = absoluteUrl("/thank-you");
 <script>
   const form = document.querySelector("[data-contact-form]");
   const phoneInput = document.querySelector("[data-phone-format]");
+  const errorEl = document.querySelector("[data-form-error]");
+  const submitBtn = form?.querySelector('button[type="submit"]');
 
   const formatPhone = (value) => {
     let digits = value.replace(/\D/g, "");
@@ -314,24 +336,45 @@ const thankYouUrl = absoluteUrl("/thank-you");
   phoneInput?.addEventListener("blur", syncPhone);
   phoneInput?.addEventListener("change", syncPhone);
 
-  // Normalize autofill before browser constraint checks (click or Enter submit).
-  form?.addEventListener(
-    "click",
-    (event) => {
-      const target = event.target;
-      if (target instanceof HTMLButtonElement && target.type === "submit") {
-        syncPhone();
+  // Free Formspree ignores custom redirects. Submit via AJAX, then go to /thank-you.
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    syncPhone();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    if (!form.action || form.dataset.formspreeReady !== "true") return;
+
+    // Chrome autofill sometimes fills the honeypot; always clear before send.
+    const gotcha = form.querySelector('[name="_gotcha"]');
+    if (gotcha instanceof HTMLInputElement) gotcha.value = "";
+
+    errorEl && (errorEl.hidden = true);
+    if (submitBtn instanceof HTMLButtonElement) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending…";
+    }
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+
+      if (response.ok) {
+        window.location.assign("/thank-you");
+        return;
       }
-    },
-    true,
-  );
-  form?.addEventListener(
-    "keydown",
-    (event) => {
-      if (event.key === "Enter" && event.target instanceof HTMLInputElement) {
-        syncPhone();
+
+      throw new Error(`Formspree error ${response.status}`);
+    } catch {
+      errorEl && (errorEl.hidden = false);
+      if (submitBtn instanceof HTMLButtonElement) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send inquiry";
       }
-    },
-    true,
-  );
+    }
+  });
 </script>
