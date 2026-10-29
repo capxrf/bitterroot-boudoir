@@ -1,4 +1,6 @@
 ---
+import { business } from "../lib/site";
+
 const year = new Date().getFullYear();
 ---
 
@@ -27,9 +29,10 @@ const year = new Date().getFullYear();
     />
     <h1 id="coming-soon-title">Coming Soon</h1>
     <p class="coming-soon-lede">
-      Exclusive boudoir photography based in Stevensville, Montana.
+      Exclusive boudoir photography based in Stevensville, Montana — serving{" "}
+      {business.serviceAreaText}.
     </p>
-    <p class="coming-soon-copy-note">&copy; {year} Bitterroot Boudoir</p>
+    <p class="coming-soon-copy-note">&copy; {year} {business.name}</p>
   </div>
 </section>
 

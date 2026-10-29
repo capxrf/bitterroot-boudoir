@@ -2,18 +2,28 @@
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import ComingSoon from "../components/ComingSoon.astro";
+import { absoluteUrl, business, siteUrl } from "../lib/site";
 import "../styles/global.css";
 
 interface Props {
   title: string;
   description?: string;
   bodyClass?: string;
+  /** Path or absolute URL for social preview image */
+  ogImage?: string;
+  /** Extra JSON-LD graph nodes (FAQPage, etc.) */
+  schemas?: Record<string, unknown>[];
+  /** Set true for 404 and other non-canonical pages */
+  noindex?: boolean;
 }
 
 const {
   title,
-  description = "Premium boudoir photography in Stevensville, Montana. Fall in love with the image of yourself.",
+  description = business.description,
   bodyClass = "",
+  ogImage = business.defaultOgImage,
+  schemas = [],
+  noindex = false,
 } = Astro.props;
 
 // Temporary gate: set PUBLIC_COMING_SOON=false in .env to preview the full site locally.
@@ -21,13 +31,64 @@ const comingSoon = import.meta.env.PUBLIC_COMING_SOON !== "false";
 
 const fullTitle = comingSoon
   ? "Coming Soon | Bitterroot Boudoir"
-  : title === "Bitterroot Boudoir"
+  : title.includes("Bitterroot Boudoir")
     ? title
     : `${title} | Bitterroot Boudoir`;
 
 const metaDescription = comingSoon
   ? "Bitterroot Boudoir is coming soon — exclusive boudoir photography in Stevensville, Montana."
   : description;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? siteUrl);
+// Prefer clean trailing-slash-free canonicals for indexable pages
+if (canonicalURL.pathname.length > 1 && canonicalURL.pathname.endsWith("/")) {
+  canonicalURL.pathname = canonicalURL.pathname.slice(0, -1);
+}
+
+const ogImageURL = ogImage.startsWith("http")
+  ? ogImage
+  : absoluteUrl(ogImage);
+
+const shouldNoindex = comingSoon || noindex;
+
+const localBusinessSchema = {
+  "@type": "ProfessionalService",
+  "@id": `${siteUrl}/#business`,
+  name: business.name,
+  image: absoluteUrl(business.logo),
+  url: siteUrl,
+  telephone: business.telephone,
+  email: business.email,
+  description: business.description,
+  priceRange: business.priceRange,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: business.locality,
+    addressRegion: business.region,
+    addressCountry: business.country,
+  },
+  areaServed: business.areaServed.map((name) =>
+    name === "Bitterroot Valley"
+      ? { "@type": "AdministrativeArea", name }
+      : { "@type": "City", name },
+  ),
+  sameAs: [...business.sameAs],
+};
+
+const websiteSchema = {
+  "@type": "WebSite",
+  "@id": `${siteUrl}/#website`,
+  name: business.name,
+  url: siteUrl,
+  description: business.description,
+  publisher: { "@id": `${siteUrl}/#business` },
+  inLanguage: "en-US",
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [websiteSchema, localBusinessSchema, ...schemas],
+};
 ---
 
 <!doctype html>
@@ -36,9 +97,24 @@ const metaDescription = comingSoon
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={metaDescription} />
-    {comingSoon && <meta name="robots" content="noindex, nofollow" />}
+    {shouldNoindex && <meta name="robots" content="noindex, nofollow" />}
     <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalURL.href} />
     <link rel="icon" type="image/png" href="/images/brand/logo-mark.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={business.name} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:image" content={ogImageURL} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={metaDescription} />
+    <meta name="twitter:image" content={ogImageURL} />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -46,6 +122,15 @@ const metaDescription = comingSoon
       rel="stylesheet"
     />
     <title>{fullTitle}</title>
+
+    {
+      !comingSoon && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(jsonLd)}
+        />
+      )
+    }
   </head>
   <body class={comingSoon ? "coming-soon-page" : bodyClass}>
     {

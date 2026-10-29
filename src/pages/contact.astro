@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { business } from "../lib/site";
 
 const formspreeId = import.meta.env.PUBLIC_FORMSPREE_ID;
 const formAction = formspreeId
@@ -8,8 +9,8 @@ const formAction = formspreeId
 ---
 
 <BaseLayout
-  title="Contact"
-  description="Book a premium boudoir session with Bitterroot Boudoir in Stevensville, Montana."
+  title="Book a Boudoir Session | Bitterroot Boudoir"
+  description={`Contact Bitterroot Boudoir to book a boudoir session in Stevensville, MT. Call ${business.telephoneDisplay} or email ${business.email}. Serving ${business.serviceAreaText}.`}
 >
   <section class="page-hero">
     <div class="wrap">
@@ -28,12 +29,12 @@ const formAction = formspreeId
         <h2>Details</h2>
         <p>
           Based in Stevensville, MT<br />
-          Serving the Bitterroot Valley & surrounding areas
+          Serving {business.serviceAreaText}
         </p>
         <p>
           Prefer email or phone?<br />
-          <a href="mailto:hello@bitterrootboudoir.com">hello@bitterrootboudoir.com</a><br />
-          <a href="tel:+14062099806">(406) 209-9806</a>
+          <a href={`mailto:${business.email}`}>{business.email}</a><br />
+          <a href={`tel:${business.telephone}`}>{business.telephoneDisplay}</a>
         </p>
       </aside>
 

@@ -1,7 +1,9 @@
 ---
+import { business } from "../lib/site";
+
 const year = new Date().getFullYear();
 
-const instagramUrl = "https://www.instagram.com/bitterrootboudoir/";
+const instagramUrl = business.sameAs[0];
 /** Replace with your profile URL when ready. */
 const facebookUrl = "https://www.facebook.com/";
 ---
@@ -71,13 +73,17 @@ const facebookUrl = "https://www.facebook.com/";
       </nav>
     </div>
     <p class="footer-meta">
-      Stevensville, Montana
+      Based in Stevensville, MT
       <span aria-hidden="true">·</span>
-      <a class="footer-meta-link" href="tel:+14062099806">(406) 209-9806</a>
+      Serving {business.serviceAreaText}
+      <span aria-hidden="true">·</span>
+      <a class="footer-meta-link" href={`tel:${business.telephone}`}
+        >{business.telephoneDisplay}</a
+      >
       <span aria-hidden="true">·</span>
       <a class="footer-meta-link" href="/privacy">Privacy</a>
       <span aria-hidden="true">·</span>
-      &copy; {year} Bitterroot Boudoir
+      &copy; {year} {business.name}
     </p>
   </div>
 </footer>
@@ -185,10 +191,12 @@ const facebookUrl = "https://www.facebook.com/";
   .footer-meta {
     margin: 0;
     font-size: 0.8rem;
-    line-height: 1.2;
+    line-height: 1.45;
     color: var(--ink-soft);
     letter-spacing: 0.01em;
     text-align: center;
+    max-width: 42rem;
+    margin-inline: auto;
   }
 
   .footer-meta span {

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { business } from "../lib/site";
 
 const faqs = [
   {
@@ -23,8 +24,7 @@ const faqs = [
   },
   {
     question: "Where do sessions take place?",
-    answer:
-      'Sessions are based in or near Stevensville, Montana, at one of a few venues depending on the package and your vision. Outdoor session locations can vary by season. We\'ll choose the setting that best supports the look and mood you want. All venues are selected to be private of course. I do offer to travel on-site to special locations upon request, but will advise that not all locations are conducive to great photography. Call me directly at <a href="tel:+14062099806">(406) 209-9806</a> to discuss special location requests.',
+    answer: `Sessions are most commonly based in or near Stevensville, Montana, at one of a few venues depending on the package and your vision. I serve ${business.serviceAreaText}. Outdoor session locations can vary by season. We'll choose the setting that best supports the look and mood you want. All venues are selected to be private of course. I do offer to travel on-site to special locations upon request, but will advise that not all locations are conducive to great photography. Call me directly at <a href="tel:${business.telephone}">${business.telephoneDisplay}</a> to discuss special location requests.`,
   },
   {
     question: "How long is a session?",
@@ -39,28 +39,47 @@ const faqs = [
   {
     question: "Is the session private?",
     answer:
-      "Yes. Your comfort and privacy come first. Sessions are completely private. Final photo galleries are also private by default, and nothing is shared publicly without your explicit permission. I do greatly appreciate any opportunitites to share my work in my portfolio and ask my clients if there are any images they are willing for me to share, but I will never do so without confirming with the client.",
+      "Yes. Your comfort and privacy come first. Sessions are completely private. Final photo galleries are also private by default, and nothing is shared publicly without your explicit permission. I do greatly appreciate any opportunities to share my work in my portfolio and ask my clients if there are any images they are willing for me to share, but I will never do so without confirming with the client.",
   },
   {
     question: "How do I book?",
-    answer:
-      'Start with the contact form, email, or call <a href="tel:+14062099806">(406) 209-9806</a>. We\'ll schedule a short introductory call to talk through your goals, choose a package, and lock in your date. I pride myself on clear communication and will strive to keep you informed at every step.',
+    answer: `Start with the contact form, email, or call <a href="tel:${business.telephone}">${business.telephoneDisplay}</a>. We'll schedule a short introductory call to talk through your goals, choose a package, and lock in your date. I pride myself on clear communication and will strive to keep you informed at every step.`,
   },
 ];
 
-/** Italicize "quoted phrases" in FAQ answers. */
-const formatAnswer = (text) =>
-  text.replace(/"([^"]+)"/g, "<em>“$1”</em>");
+/** Italicize dialogue "quoted phrases", but never touch quotes inside HTML tags. */
+const formatAnswer = (text: string) =>
+  text.replace(/"([^"]+)"/g, (match, inner, offset, full) => {
+    const before = full.slice(0, offset);
+    if (before.lastIndexOf("<") > before.lastIndexOf(">")) return match;
+    return `<em>“${inner}”</em>`;
+  });
+
+const stripHtml = (text: string) => text.replace(/<[^>]+>/g, "");
+
+const faqSchema = {
+  "@type": "FAQPage",
+  "@id": "https://bitterrootboudoir.com/faqs#faq",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: stripHtml(faq.answer),
+    },
+  })),
+};
 ---
 
 <BaseLayout
-  title="FAQs"
-  description="Frequently asked questions about boudoir sessions with Bitterroot Boudoir in Stevensville, Montana."
+  title="Boudoir Session FAQs | Bitterroot Boudoir"
+  description={`Answers about boudoir sessions, wardrobe, privacy, hair & makeup, and booking with Bitterroot Boudoir in Stevensville, MT — serving ${business.serviceAreaText}.`}
+  schemas={[faqSchema]}
 >
   <section class="page-hero">
     <div class="wrap">
       <p class="eyebrow reveal">FAQs</p>
-      <h1 class="reveal reveal-delay-1">Questions, answered.</h1>
+      <h1 class="reveal reveal-delay-1">Boudoir session FAQs.</h1>
       <p class="lede reveal reveal-delay-2">
         A few things clients often ask before booking. If you don't see your
         question here, reach out. I'm happy to answer any questions.
@@ -133,6 +152,17 @@ const formatAnswer = (text) =>
     margin: 0;
     padding: 0 1.25rem 1.2rem;
     max-width: 40rem;
+  }
+
+  .faq-item p :global(a) {
+    color: var(--accent);
+    text-decoration-color: rgba(var(--accent-rgb), 0.45);
+    text-underline-offset: 0.18em;
+    white-space: nowrap;
+  }
+
+  .faq-item p :global(a:hover) {
+    text-decoration-color: var(--accent);
   }
 
   .faq-cta {
