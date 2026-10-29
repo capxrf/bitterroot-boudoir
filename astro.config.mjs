@@ -6,7 +6,11 @@ export default defineConfig({
   site: 'https://bitterrootboudoir.com',
   output: 'static',
   compressHTML: true,
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes("/thank-you"),
+    }),
+  ],
   devToolbar: {
     enabled: false,
   },

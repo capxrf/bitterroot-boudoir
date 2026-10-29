@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Inquiry sent | Bitterroot Boudoir"
+  description="Thanks for reaching out to Bitterroot Boudoir. I'll reply to your inquiry soon."
+  noindex={true}
+>
+  <section class="page-hero thanks">
+    <div class="wrap">
+      <p class="eyebrow reveal">Contact</p>
+      <h1 class="reveal reveal-delay-1">Thanks! Your inquiry is on its way.</h1>
+      <p class="lede reveal reveal-delay-2">
+        I'll be in contact with you soon. While you wait, please feel free to browse the gallery
+        or packages.
+      </p>
+      <div class="cta-row reveal reveal-delay-3">
+        <a class="btn btn-primary" href="/gallery">View the gallery</a>
+        <a class="btn btn-ghost" href="/packages">See packages</a>
+        <a class="btn btn-ghost" href="/">Back home</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .thanks {
+    min-height: calc(100svh - var(--nav-h));
+    display: flex;
+    align-items: center;
+    padding-bottom: var(--space-xl);
+  }
+
+  .thanks h1 {
+    max-width: 16ch;
+  }
+
+  .thanks .lede {
+    max-width: 34rem;
+  }
+</style>
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  const storageKey = "bb_contact_inquiry_conversion";
+  if (!sessionStorage.getItem(storageKey)) {
+    sessionStorage.setItem(storageKey, "1");
+    window.dataLayer.push({
+      event: "generate_lead",
+      form_name: "contact_inquiry",
+    });
+  }
+</script>
