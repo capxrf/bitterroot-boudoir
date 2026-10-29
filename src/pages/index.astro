@@ -12,13 +12,13 @@ const homeImages = getHomeImages(6);
   bodyClass="home"
 >
   <section class="hero">
-    <div class="hero-media" aria-hidden="true">
+    <div class="hero-media">
       <img
         class="hero-image"
         src="/images/home/hero.webp"
         alt=""
-        width="7364"
-        height="4142"
+        width="6896"
+        height="3643"
         loading="eager"
         decoding="async"
         fetchpriority="high"
@@ -31,8 +31,8 @@ const homeImages = getHomeImages(6);
           class="hero-logo"
           src="/images/brand/logo-full.png"
           alt="Bitterroot Boudoir — boudoir photography in Stevensville, Montana"
-          width="1800"
-          height="1180"
+          width="600"
+          height="394"
         />
       </h1>
       <!-- Tagline kept for later; hidden for now so CTAs sit under the logo. -->
@@ -93,7 +93,11 @@ const homeImages = getHomeImages(6);
                     data-set={set}
                     aria-hidden={set === 1 ? undefined : "true"}
                     tabindex={set === 1 ? undefined : -1}
-                    aria-label={`View gallery — photograph ${image.id}`}
+                    aria-label={
+                      set === 1
+                        ? `View gallery — photograph ${image.id}`
+                        : undefined
+                    }
                   >
                     <Image
                       src={image.src}
