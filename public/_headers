@@ -6,8 +6,10 @@
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Images in /public keep stable filenames, so they must not be immutable.
+# Long immutable caching is fine for fingerprinted /_astro/* and /fonts/* assets.
 /images/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, must-revalidate
 
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
